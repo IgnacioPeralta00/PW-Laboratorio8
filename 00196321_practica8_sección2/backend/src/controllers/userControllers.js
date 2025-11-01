@@ -32,7 +32,7 @@ export const createUser = async (request, response) => {
     const saltRounds = 10; // Número de rondas de hashing
     const hashedPassword = await bcrypt.hash(password, saltRounds)
 
-    pool.query('INSERT INTO users (name, email, hashedPassword) VALUES ($1, $2, $3) RETURNING *', [name, email, hashedPassword], (error, results) => {
+    pool.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *', [name, email, hashedPassword], (error, results) => {
         if (error) {
             throw error
         }
