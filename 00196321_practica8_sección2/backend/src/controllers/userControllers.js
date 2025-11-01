@@ -1,4 +1,5 @@
 import { pool } from '../database/connection.js'
+import bcrypt from 'bcrypt'
 
 export const displayHome = (req, res) => {
     res.send('Bienvenido al himalaya')
@@ -24,10 +25,14 @@ export const getUserById = (request, response) => {
     })
 }
 
-export const createUser = (request, response) => {
+export const createUser = async (request, response) => {
     const { name, email, password } = request.body
 
-    pool.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *', [name, email, password], (error, results) => {
+    // Hashear la contraseña
+    const saltRounds = 10; // Número de rondas de hashing
+    const hashedPassword = await bcrypt.hash(password, saltRounds)
+
+    pool.query('INSERT INTO users (name, email, hashedPassword) VALUES ($1, $2, $3) RETURNING *', [name, email, hashedPassword], (error, results) => {
         if (error) {
             throw error
         }
