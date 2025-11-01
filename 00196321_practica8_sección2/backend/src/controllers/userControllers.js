@@ -1,5 +1,9 @@
 import { pool } from '../database/connection.js'
 
+export const displayHome = (req, res) => {
+    res.send('Bienvenido al himalaya')
+}
+
 export const getUsers = (request, response) => {
     pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
         if (error) {
@@ -36,7 +40,7 @@ export const updateUser = (request, response) => {
     const { name, email } = request.body
 
     pool.query(
-        'UPDATE users SET name = $1, email = $2 WHERE id = $3',
+        'UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *',
         [name, email, id],
         (error, results) => {
             if (error) {

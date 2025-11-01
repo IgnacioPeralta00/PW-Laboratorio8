@@ -1,5 +1,7 @@
 import express from "express";
+import verifyToken from "../middlewares/verifyToken.js";
 import {
+    displayHome,
     getUsers,
     getUserById,
     createUser,
@@ -9,13 +11,11 @@ import {
 
 const router = express.Router();
 
-// router.post("/register", registerUser);
-// router.post("/login", loginUser);
+router.get('/', verifyToken, displayHome);
+router.get('/users', verifyToken, getUsers);
+router.get('/users/:id', verifyToken, getUserById);
+router.post('/users', verifyToken, createUser);
+router.put('/users/:id', verifyToken, updateUser);
+router.delete('/users/:id', verifyToken, deleteUser);
 
-router.get("/", getUsers);
-router.get("/:id", getUserById);
-router.post("/", createUser);
-router.put("/:id", updateUser);
-router.delete("/:id", deleteUser);
-
-export default router;
+export default router
